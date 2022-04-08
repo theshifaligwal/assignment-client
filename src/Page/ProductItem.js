@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../actions/actions";
+import { addProductToCart, getProductById } from "../actions/actions";
 import { API_URL } from "../api";
 import { getProductByIdFromAPI } from "../helperFunction/product";
 
@@ -11,6 +11,11 @@ const ProductItem = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const product = useSelector((state) => state.productItem);
+
+  const handleProductAdd = (product) => (event) => {
+    event.preventDefault();
+    dispatch(addProductToCart(product));
+  };
 
   useEffect(() => {
     getProductByIdFromAPI(id).then((res) => {
@@ -33,7 +38,12 @@ const ProductItem = () => {
               {product.attributes.meta_description}
             </p>
             <p className="price-product-item">${product.attributes.price}</p>
-            <button className="btnRemoveFromCart">Add to cart</button>
+            <button
+              onClick={handleProductAdd(product)}
+              className="btnRemoveFromCart"
+            >
+              Add to cart
+            </button>
           </div>
         </div>
       </div>
